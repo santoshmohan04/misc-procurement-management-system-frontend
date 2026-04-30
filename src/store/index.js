@@ -1,17 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./User";
-import { dashboardApi } from "./dashboardApi";
+import { procurementApi } from "./procurementApi";
 
 const store = configureStore({
   reducer: {
     user: userReducer,
-    [dashboardApi.reducerPath]: dashboardApi.reducer,
+    [procurementApi.reducerPath]: procurementApi.reducer,
   },
   devTools: true,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(dashboardApi.middleware),
+    }).concat(procurementApi.middleware),
 });
 
 export default store;

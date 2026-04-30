@@ -1,41 +1,10 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-export const dashboardApi = createApi({
-  reducerPath: "dashboardApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000",
-    prepareHeaders: (headers) => {
-      const token = JSON.parse(localStorage.getItem("token") || "null");
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-      }
-      return headers;
-    },
-  }),
-  tagTypes: ["Orders", "Payments", "Delivery", "Suppliers"],
-  endpoints: (builder) => ({
-    getOrders: builder.query({
-      query: () => "/api/orderNew/",
-      providesTags: ["Orders"],
-    }),
-    getPayments: builder.query({
-      query: () => "/api/payment/",
-      providesTags: ["Payments"],
-    }),
-    getDeliveryAdvice: builder.query({
-      query: () => "/api/deliveryAdvice/",
-      providesTags: ["Delivery"],
-    }),
-    getSuppliers: builder.query({
-      query: () => "/api/supplier/",
-      providesTags: ["Suppliers"],
-    }),
-  }),
-});
-
-export const {
+// Re-export from procurementApi for backward compatibility.
+// The Dashboard page imports from this file; all RTK Query state is now
+// served by the single procurementApi service registered in the store.
+export {
+  procurementApi as dashboardApi,
   useGetOrdersQuery,
   useGetPaymentsQuery,
   useGetDeliveryAdviceQuery,
   useGetSuppliersQuery,
-} = dashboardApi;
+} from "./procurementApi";
