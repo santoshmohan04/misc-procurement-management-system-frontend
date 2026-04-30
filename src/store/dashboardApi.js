@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const dashboardApi = createApi({
   reducerPath: "dashboardApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000",
+    baseUrl: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000",
     prepareHeaders: (headers) => {
       const token = JSON.parse(localStorage.getItem("token") || "null");
       if (token) {

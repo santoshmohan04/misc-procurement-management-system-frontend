@@ -13,6 +13,14 @@ import OrdersChart from "./components/OrdersChart";
 import PaymentsChart from "./components/PaymentsChart";
 import DeliveryChart from "./components/DeliveryChart";
 
+const formatCurrency = (amount) =>
+  new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
+
 const today = () => new Date().toISOString().slice(0, 10);
 const oneYearAgo = () => {
   const d = new Date();
@@ -175,7 +183,7 @@ const Dashboard = () => {
           ) : (
             <MetricCard
               title="Total Payments"
-              value={`$${totalPaymentAmount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+              value={formatCurrency(totalPaymentAmount)}
               subtitle={`${payments.length} transaction${payments.length !== 1 ? "s" : ""}`}
               icon="💳"
               colorClass="bg-green-500"
