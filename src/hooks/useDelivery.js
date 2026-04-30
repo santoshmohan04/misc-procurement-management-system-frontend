@@ -7,8 +7,7 @@ import {
   useDeleteDeliveryMutation,
 } from "../store/procurementApi";
 
-const toArray = (data) =>
-  Array.isArray(data?.data) ? data.data : data || [];
+const toArray = (data) => (Array.isArray(data?.data) ? data.data : data || []);
 
 /**
  * useSupplierDelivery – delivery advice list for a supplier, with delete.
@@ -34,7 +33,8 @@ export const useSupplierDelivery = () => {
         try {
           await deleteDeliveryMutation(id).unwrap();
         } catch (err) {
-          const msgText = err?.message?.split("Error: ")[1] || "Something went wrong";
+          const msgText =
+            err?.message?.split("Error: ")[1] || "Something went wrong";
           Swal.fire("Error!", msgText, "error");
         }
       }

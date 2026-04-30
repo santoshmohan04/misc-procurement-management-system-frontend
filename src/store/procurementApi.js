@@ -43,7 +43,11 @@ export const procurementApi = createApi({
       providesTags: (_result, _error, id) => [{ type: "Orders", id }],
     }),
     createOrder: builder.mutation({
-      query: (order) => ({ url: "/api/orderNew/", method: "POST", body: order }),
+      query: (order) => ({
+        url: "/api/orderNew/",
+        method: "POST",
+        body: order,
+      }),
       invalidatesTags: ["Orders", "ManagerOrders"],
     }),
     updateOrder: builder.mutation({
