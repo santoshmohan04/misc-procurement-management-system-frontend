@@ -5,7 +5,13 @@ import React from "react";
  * payment settlement. Wrapped in React.memo to avoid re-renders when the
  * parent container re-renders for unrelated reasons.
  */
-const PaymentTable = ({ orders, totalPrice, onCalculate, onSettle }) => (
+const PaymentTable = ({
+  orders,
+  totalPrice,
+  showTotal,
+  onCalculate,
+  onSettle,
+}) => (
   <div className="col">
     <center>
       <div>
@@ -16,7 +22,7 @@ const PaymentTable = ({ orders, totalPrice, onCalculate, onSettle }) => (
           <thead>
             <tr>
               <th>#</th>
-              <th>Item Name</th>
+              <th>Delivery Items</th>
               <th>Quantity</th>
               <th>Unit Price (Rs.)</th>
               <th>Total (Rs.)</th>
@@ -36,12 +42,12 @@ const PaymentTable = ({ orders, totalPrice, onCalculate, onSettle }) => (
         </table>
       </div>
       <br />
-      {!totalPrice && (
+      {!showTotal && (
         <button onClick={onCalculate} className="btn btn-primary btn-block">
           Check the Total Price
         </button>
       )}
-      {totalPrice > 0 && (
+      {showTotal && totalPrice > 0 && (
         <div>
           <h3>Total Price (Rs.) = {totalPrice}</h3>
           <br />

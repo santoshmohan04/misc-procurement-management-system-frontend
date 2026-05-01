@@ -73,7 +73,7 @@ const PurchaseOrderForm = ({
             value={measuringUnit}
             onChange={(e) => onMeasuringUnitChange(e.target.value)}>
             <option value="">select</option>
-            <option value="Kg">Killogram(Kg)</option>
+            <option value="Kg">Kilogram(Kg)</option>
             <option value="g">gram(g)</option>
           </select>
         </div>

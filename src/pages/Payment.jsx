@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState, useEffect } from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Cover from "../assets/images/supply.jpg";
@@ -9,14 +9,19 @@ import { useManagerDelivery } from "../hooks/useDelivery";
 const Payment = () => {
   const { deliveries, isLoading } = useManagerDelivery();
   const { settlePayment, calculateTotal } = useCreatePayment();
+  const [showTotal, setShowTotal] = useState(false);
 
   const totalPrice = useMemo(
     () => calculateTotal(deliveries),
     [calculateTotal, deliveries],
   );
 
+  useEffect(() => {
+    setShowTotal(false);
+  }, [deliveries]);
+
   const handleCalculate = useCallback(() => {
-    /* Total is derived via useMemo – clicking this just makes it visible */
+    setShowTotal(true);
   }, []);
 
   const handleSettle = useCallback(
@@ -63,6 +68,7 @@ const Payment = () => {
                 <PaymentTable
                   orders={deliveries}
                   totalPrice={totalPrice}
+                  showTotal={showTotal}
                   onCalculate={handleCalculate}
                   onSettle={handleSettle}
                 />
