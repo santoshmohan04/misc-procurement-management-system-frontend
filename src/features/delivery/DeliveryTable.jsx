@@ -1,5 +1,6 @@
 import React from "react";
 import UpdateDeliveryAdvice from "../../components/models/UpdateDeliveryAdvice";
+import useDataTable from "../../hooks/useDataTable";
 
 const DeleteIcon = () => (
   <svg
@@ -16,89 +17,127 @@ const DeleteIcon = () => (
   </svg>
 );
 
+const SortIcon = ({ active, dir }) => (
+  <span className="ml-1 inline-block text-gray-400">
+    {active ? (dir === "asc" ? "▲" : "▼") : "⇅"}
+  </span>
+);
+
+const COLUMNS = [
+  { key: "_id", label: "Delivery ID" },
+  { key: "orderID", label: "Order ID" },
+  { key: "deliveryItems", label: "Delivery Items" },
+  { key: "deliveredDate", label: "Delivered Date" },
+  { key: "quantity", label: "Quantity" },
+  { key: "unitPrice", label: "Unit Price" },
+  { key: "total", label: "Total" },
+  { key: "description", label: "Description" },
+  { key: "managerID", label: "Manager ID" },
+];
+
+const SEARCH_FIELDS = ["_id", "orderID", "deliveryItems", "deliveredDate", "managerID"];
+
 /**
- * DeliveryTableRow – memoized single row to prevent re-renders of unchanged rows.
+ * DeliveryTable – sortable, searchable, paginated table of delivery advice records.
  */
-const DeliveryTableRow = React.memo(({ chi, onDelete }) => (
-  <tr className="border-b border-gray-200 hover:bg-gray-100">
-    {[
-      chi._id,
-      chi.orderID,
-      chi.deliveryItems,
-      chi.deliveredDate,
-      chi.quantity,
-      chi.unitPrice,
-      chi.total,
-      chi.description,
-      chi.managerID,
-    ].map((val, i) => (
-      <td key={i} className="py-3 px-6 text-left whitespace-nowrap">
-        <div className="flex items-center">
-          <span className="font-medium">{val}</span>
-        </div>
-      </td>
-    ))}
-    <td className="py-3 px-6 text-left whitespace-nowrap">
-      <div className="flex item-center justify-center">
-        <UpdateDeliveryAdvice chi={chi} />
-        <div
-          className="w-4 mr-2 transform hover:text-purple-500 hover:scale-110"
-          onClick={() => onDelete(chi._id)}>
-          <DeleteIcon />
-        </div>
+const DeliveryTable = ({ deliveries, onDelete }) => {
+  const {
+    search,
+    setSearch,
+    sortKey,
+    sortDir,
+    handleSort,
+    page,
+    setPage,
+    displayRows,
+    totalPages,
+    totalCount,
+  } = useDataTable(deliveries, SEARCH_FIELDS);
+
+  return (
+    <div className="w-full">
+      {/* Search */}
+      <div className="mb-4 max-w-xs">
+        <input
+          type="text"
+          className="block w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+          placeholder="Search deliveries…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
       </div>
-    </td>
-  </tr>
-));
 
-DeliveryTableRow.displayName = "DeliveryTableRow";
-
-/**
- * DeliveryTable – presentational table of delivery advice records.
- * Wrapped in React.memo at the table level; individual rows are also memoized.
- */
-const DeliveryTable = ({ deliveries, onDelete }) => (
-  <div className="overflow-x-auto ml-10">
-    <div className="w-full lg:w-5/6">
-      <div className="bg-white shadow-md rounded my-6">
-        <table className="min-w-max w-full table-auto">
+      <div className="bg-white shadow-md rounded overflow-x-auto">
+        <table className="min-w-max w-full table-auto text-sm">
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-              {[
-                "Delivery ID",
-                "Order ID",
-                "Delivery Items",
-                "Delivered Date",
-                "Quantity",
-                "Unit Price",
-                "Total",
-                "Description",
-                "Manager ID",
-                "Actions",
-              ].map((h) => (
-                <th key={h} className="py-3 px-6 text-left">
-                  {h}
+              {COLUMNS.map(({ key, label }) => (
+                <th
+                  key={key}
+                  className="py-3 px-6 text-left cursor-pointer select-none hover:bg-gray-300"
+                  onClick={() => handleSort(key)}>
+                  {label}
+                  <SortIcon active={sortKey === key} dir={sortDir} />
                 </th>
               ))}
+              <th className="py-3 px-6 text-left">Actions</th>
             </tr>
           </thead>
-          <tbody className="text-gray-600 text-sm font-light">
-            {!deliveries.length ? (
+          <tbody className="text-gray-600 font-light">
+            {!displayRows.length ? (
               <tr>
-                <td colSpan={10} className="py-6 text-center text-gray-500">
+                <td colSpan={COLUMNS.length + 1} className="py-6 text-center text-gray-500">
                   No Delivery Advice Found.
                 </td>
               </tr>
             ) : (
-              deliveries.map((chi) => (
-                <DeliveryTableRow key={chi._id} chi={chi} onDelete={onDelete} />
+              displayRows.map((chi) => (
+                <tr key={chi._id} className="border-b border-gray-200 hover:bg-gray-100">
+                  {COLUMNS.map(({ key }) => (
+                    <td key={key} className="py-3 px-6 text-left whitespace-nowrap">
+                      <span className="font-medium">{chi[key]}</span>
+                    </td>
+                  ))}
+                  <td className="py-3 px-6">
+                    <div className="flex items-center gap-2">
+                      <UpdateDeliveryAdvice chi={chi} />
+                      <button
+                        className="w-4 text-gray-400 hover:text-red-500 hover:scale-110 transition-transform"
+                        onClick={() => onDelete(chi._id)}>
+                        <DeleteIcon />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
               ))
             )}
           </tbody>
         </table>
       </div>
+
+      {/* Pagination */}
+      <div className="flex items-center justify-between mt-3 text-sm text-gray-600">
+        <span>{totalCount} record{totalCount !== 1 ? "s" : ""}</span>
+        <div className="flex items-center gap-1">
+          <button
+            className="px-2 py-1 rounded border border-gray-300 disabled:opacity-40"
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page === 1}>
+            ‹ Prev
+          </button>
+          <span className="px-2">
+            {page} / {totalPages}
+          </span>
+          <button
+            className="px-2 py-1 rounded border border-gray-300 disabled:opacity-40"
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={page === totalPages}>
+            Next ›
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default React.memo(DeliveryTable);

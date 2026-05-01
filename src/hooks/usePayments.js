@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 import {
   useGetManagerPaymentsQuery,
   useGetPaymentsQuery,
@@ -22,26 +22,12 @@ export const useManagerPayments = () => {
 
   const deletePayment = useCallback(
     async (id) => {
-      const result = await Swal.fire({
-        title: "Are you sure?",
-        text: "Please confirm whether you intend to delete this Payment",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Delete",
-      });
-      if (result.isConfirmed) {
-        try {
-          await deletePaymentMutation(id).unwrap();
-          Swal.fire(
-            "Payment Deleted Successfully!",
-            "Click Ok to continue",
-            "success",
-          );
-        } catch {
-          Swal.fire("Error!", "Something went wrong", "error");
-        }
+      if (!window.confirm("Please confirm whether you intend to delete this Payment")) return;
+      try {
+        await deletePaymentMutation(id).unwrap();
+        toast.success("Payment deleted successfully.");
+      } catch {
+        toast.error("Something went wrong. Please try again.");
       }
     },
     [deletePaymentMutation],
@@ -73,14 +59,10 @@ export const useCreatePayment = () => {
           paymentAmount: totalPrice,
           paymentStatus: "Paid",
         }).unwrap();
-        Swal.fire(
-          "Payment Created Successfully!",
-          "Click Ok to continue",
-          "success",
-        );
+        toast.success("Payment settled successfully!");
         return true;
       } catch {
-        Swal.fire("Error!", "Something went wrong", "error");
+        toast.error("Something went wrong. Please try again.");
         return false;
       }
     },

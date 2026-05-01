@@ -1,78 +1,38 @@
 import React from "react";
-import Header from "../components/Header";
-import Sidebar from "../components/Sidebar";
-import Cover from "../assets/images/supply.jpg";
+import AppLayout from "../components/AppLayout";
 import { usePurchasedOrders } from "../hooks/useOrders";
 
 const PurchasedOrder = () => {
   const { orders, isLoading } = usePurchasedOrders();
 
   return (
-    <div>
-      <div className="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-white dark:bg-gray-700 text-black dark:text-white">
-        <Header />
-        <Sidebar />
-        <div
-          className="h-full pt-14 pb-14 md:ml-64"
-          style={{
-            backgroundImage: `url(${Cover})`,
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
-            height: "1200px",
-          }}>
-          <div className="grid grid-cols-3 gap-4" style={{ marginLeft: "100px" }}>
-            {isLoading ? (
-              <div style={{ width: "1300px" }}>
-                <p className="text-gray-500 mt-20 ml-40">Loading orders…</p>
-              </div>
-            ) : !orders.length ? (
-              <div style={{ width: "1300px" }}>
-                <div
-                  style={{
-                    background: "lightblue",
-                    marginLeft: "150px",
-                    marginTop: "150px",
-                    paddingLeft: "20px",
-                    paddingRight: "20px",
-                  }}>
-                  <h4>No Order Purchase Created !</h4>
-                  <p>No Orders Were Found.</p>
-                </div>
-              </div>
-            ) : (
-              orders.map((order) => (
-                <div
-                  key={order._id}
-                  className="rounded-lg shadow-lg bg-white max-w-m"
-                  style={{
-                    height: "510px",
-                    width: "300px",
-                    textAlign: "center",
-                    padding: "10px",
-                  }}>
-                  <p style={{ fontWeight: "bold" }}>Order ID</p>
-                  <br />
-                  <p>{order._id}</p>
-                  <br />
-                  <p style={{ fontWeight: "bold" }}>Manager ID</p>
-                  <br />
-                  <p>{order.managerID}</p>
-                  <br />
-                  <p style={{ fontWeight: "bold" }}>Supplier ID</p>
-                  <br />
-                  <p>{order.supplierID}</p>
-                  <br />
-                  <p style={{ fontWeight: "bold" }}>Delivery Status</p>
-                  <br />
-                  <p style={{ backgroundColor: "yellow" }}>{order.available}</p>
-                  <br />
-                </div>
-              ))
-            )}
-          </div>
+    <AppLayout>
+      {isLoading ? (
+        <p className="text-gray-500 mt-10">Loading orders…</p>
+      ) : !orders.length ? (
+        <div className="bg-blue-100 rounded p-6 max-w-md">
+          <h4 className="font-semibold">No Order Purchase Created!</h4>
+          <p className="text-sm">No Orders Were Found.</p>
         </div>
-      </div>
-    </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {orders.map((order) => (
+            <div
+              key={order._id}
+              className="rounded-lg shadow bg-white p-4 text-center">
+              <p className="font-bold text-sm">Order ID</p>
+              <p className="text-xs break-all mb-2">{order._id}</p>
+              <p className="font-bold text-sm">Manager ID</p>
+              <p className="text-xs mb-2">{order.managerID}</p>
+              <p className="font-bold text-sm">Supplier ID</p>
+              <p className="text-xs mb-2">{order.supplierID}</p>
+              <p className="font-bold text-sm">Delivery Status</p>
+              <p className="text-xs bg-yellow-200 rounded px-2 py-0.5 inline-block">{order.available}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </AppLayout>
   );
 };
 

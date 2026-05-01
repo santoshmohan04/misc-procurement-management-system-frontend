@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 import {
   useGetSupplierDeliveryQuery,
   useGetManagerDeliveryQuery,
@@ -20,23 +20,14 @@ export const useSupplierDelivery = () => {
 
   const deleteDelivery = useCallback(
     async (id) => {
-      const result = await Swal.fire({
-        title: "Are you sure?",
-        text: "Please confirm whether you intend to delete this Delivery Advice",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Delete",
-      });
-      if (result.isConfirmed) {
-        try {
-          await deleteDeliveryMutation(id).unwrap();
-        } catch (err) {
-          const msgText =
-            err?.message?.split("Error: ")[1] || "Something went wrong";
-          Swal.fire("Error!", msgText, "error");
-        }
+      if (!window.confirm("Please confirm whether you intend to delete this Delivery Advice")) return;
+      try {
+        await deleteDeliveryMutation(id).unwrap();
+        toast.success("Delivery Advice deleted successfully.");
+      } catch (err) {
+        const msgText =
+          err?.message?.split("Error: ")[1] || "Something went wrong";
+        toast.error(msgText);
       }
     },
     [deleteDeliveryMutation],

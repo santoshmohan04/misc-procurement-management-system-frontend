@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 
 import userRequest from "../api/User/user.request";
 import { storage } from "../firebase";
@@ -31,7 +31,7 @@ export const Modal = ({ isVisible, toggle, data = null, onUpdate }) => {
       if (data) onUpdate();
       toggle();
     } else {
-      Swal.fire("Something went wrong!", "Please, try again later.", "error");
+      toast.error("Something went wrong. Please try again later.");
     }
   };
 
@@ -49,7 +49,7 @@ export const Modal = ({ isVisible, toggle, data = null, onUpdate }) => {
         console.log(prog);
       },
       (error) =>
-        Swal.fire("Something went wrong!", "Please, try again later.", "error"),
+        toast.error("File upload failed. Please try again later."),
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           console.log("File available at", downloadURL);

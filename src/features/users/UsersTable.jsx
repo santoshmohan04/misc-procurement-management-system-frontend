@@ -1,5 +1,6 @@
 import React from "react";
 import UpdateUser from "../../components/models/updateUser";
+import useDataTable from "../../hooks/useDataTable";
 
 const DeleteIcon = () => (
   <svg
@@ -16,75 +17,123 @@ const DeleteIcon = () => (
   </svg>
 );
 
+const SortIcon = ({ active, dir }) => (
+  <span className="ml-1 inline-block text-gray-400">
+    {active ? (dir === "asc" ? "▲" : "▼") : "⇅"}
+  </span>
+);
+
+const COLUMNS = [
+  { key: "name", label: "Name" },
+  { key: "email", label: "Email" },
+  { key: "mobile", label: "Mobile" },
+  { key: "department", label: "Department" },
+  { key: "role", label: "Role" },
+];
+
+const SEARCH_FIELDS = ["name", "email", "mobile", "department", "role"];
+
 /**
- * UserRow – memoized single table row. Only re-renders when the specific
- * user object or onDelete reference changes.
+ * UsersTable – sortable, searchable, paginated table of all users.
  */
-const UserRow = React.memo(({ user, onDelete }) => (
-  <tr
-    className="border-b border-gray-200 hover:bg-gray-100"
-    key={user._id}>
-    {[user.name, user.email, user.mobile, user.department, user.role].map(
-      (val, i) => (
-        <td key={i} className="py-3 px-6 text-left whitespace-nowrap">
-          <div className="flex items-center">
-            <span className="font-medium">{val}</span>
-          </div>
-        </td>
-      ),
-    )}
-    <td className="py-3 px-6">
-      <div className="flex item-center justify-center">
-        <UpdateUser user={user} />
-        <div
-          className="w-4 mr-2 transform hover:text-purple-500 hover:scale-110"
-          onClick={() => onDelete(user._id)}>
-          <DeleteIcon />
-        </div>
+const UsersTable = ({ users, onDelete }) => {
+  const {
+    search,
+    setSearch,
+    sortKey,
+    sortDir,
+    handleSort,
+    page,
+    setPage,
+    displayRows,
+    totalPages,
+    totalCount,
+  } = useDataTable(users, SEARCH_FIELDS, "name");
+
+  return (
+    <div className="w-full">
+      {/* Search */}
+      <div className="mb-4 max-w-xs">
+        <input
+          type="text"
+          className="block w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+          placeholder="Search users…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
       </div>
-    </td>
-  </tr>
-));
 
-UserRow.displayName = "UserRow";
-
-/**
- * UsersTable – presentational table of all users.
- * Wrapped in React.memo; rows are individually memoized for granular updates.
- */
-const UsersTable = ({ users, onDelete }) => (
-  <div className="overflow-x-auto ml-10">
-    <div className="w-full lg:w-5/6">
-      <div className="bg-white shadow-md rounded my-6">
-        <table className="min-w-max w-full table-auto">
+      <div className="bg-white shadow-md rounded overflow-x-auto">
+        <table className="min-w-max w-full table-auto text-sm">
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-              {["Name", "Email", "Mobile", "Department", "Role", "Actions"].map(
-                (h) => (
-                  <th key={h} className="py-3 px-6 text-left">
-                    {h}
-                  </th>
-                ),
-              )}
+              {COLUMNS.map(({ key, label }) => (
+                <th
+                  key={key}
+                  className="py-3 px-6 text-left cursor-pointer select-none hover:bg-gray-300"
+                  onClick={() => handleSort(key)}>
+                  {label}
+                  <SortIcon active={sortKey === key} dir={sortDir} />
+                </th>
+              ))}
+              <th className="py-3 px-6 text-left">Actions</th>
             </tr>
           </thead>
-          <tbody className="text-gray-600 text-sm font-light">
-            {!users.length ? (
+          <tbody className="text-gray-600 font-light">
+            {!displayRows.length ? (
               <tr>
                 <td colSpan={6} className="py-6 text-center text-gray-500">
                   No Users Found.
                 </td>
               </tr>
             ) : (
-              users.map((user) => (
-                <UserRow key={user._id} user={user} onDelete={onDelete} />
+              displayRows.map((user) => (
+                <tr key={user._id} className="border-b border-gray-200 hover:bg-gray-100">
+                  {COLUMNS.map(({ key }) => (
+                    <td key={key} className="py-3 px-6 text-left whitespace-nowrap">
+                      <span className="font-medium">{user[key]}</span>
+                    </td>
+                  ))}
+                  <td className="py-3 px-6">
+                    <div className="flex items-center gap-2">
+                      <UpdateUser user={user} />
+                      <button
+                        className="w-4 text-gray-400 hover:text-red-500 hover:scale-110 transition-transform"
+                        onClick={() => onDelete(user._id)}>
+                        <DeleteIcon />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
               ))
             )}
           </tbody>
         </table>
       </div>
+
+      {/* Pagination */}
+      <div className="flex items-center justify-between mt-3 text-sm text-gray-600">
+        <span>{totalCount} user{totalCount !== 1 ? "s" : ""}</span>
+        <div className="flex items-center gap-1">
+          <button
+            className="px-2 py-1 rounded border border-gray-300 disabled:opacity-40"
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page === 1}>
+            ‹ Prev
+          </button>
+          <span className="px-2">
+            {page} / {totalPages}
+          </span>
+          <button
+            className="px-2 py-1 rounded border border-gray-300 disabled:opacity-40"
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={page === totalPages}>
+            Next ›
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default React.memo(UsersTable);

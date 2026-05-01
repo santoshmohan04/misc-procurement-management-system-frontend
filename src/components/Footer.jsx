@@ -1,30 +1,28 @@
 import React from "react";
 import { Facebook, Instagram, Youtube, Twitch } from "react-bootstrap-icons";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "../assets/css/Navigation.css";
 
 function Footer() {
   return (
-    <footer className="page-footer font-small blue pt-5">
-      <div className="container-fluid text-center text-md-left footer-content">
-        <div className="row">
-          <div className="col-md-6 mt-md-0 mt-3">
-            <h5 className="text-uppercase">The Children Cloud</h5>
-            <p>Your Child Our Responsibility..</p>
-
-            <span>
-              <Facebook size={30} style={{ margin: "0.5rem" }} />
-              <Instagram size={30} style={{ margin: "0.5rem" }} />
-              <Youtube size={30} style={{ margin: "0.5rem" }} />
-              <Twitch size={30} style={{ margin: "0.5rem" }} />
+    <footer className="bg-gray-800 text-gray-200 pt-8 pb-4">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="flex flex-wrap gap-8 justify-between">
+          <div className="flex-1 min-w-[220px]">
+            <h5 className="uppercase font-semibold text-white mb-2">The Children Cloud</h5>
+            <p className="text-sm mb-3">Your Child Our Responsibility..</p>
+            <span className="flex gap-2">
+              <Facebook size={24} />
+              <Instagram size={24} />
+              <Youtube size={24} />
+              <Twitch size={24} />
             </span>
           </div>
 
-          <hr className="clearfix w-100 d-md-none pb-0" />
+          <hr className="w-full border-gray-600 sm:hidden" />
 
-          <div className="col-md-3 mb-md-0 mb-3" style={{ textAlign: "left" }}>
-            <h5 className="text-uppercase">Terms & Policies</h5>
-            <ul className="list-unstyled">
+          <div className="min-w-[160px]">
+            <h5 className="uppercase font-semibold text-white mb-2">Terms &amp; Policies</h5>
+            <ul className="space-y-1 text-sm list-none p-0 m-0">
               <li>Policies</li>
               <li>Terms of Use</li>
               <li>Code of Conduct</li>
@@ -32,9 +30,9 @@ function Footer() {
             </ul>
           </div>
 
-          <div className="col-md-3 mb-md-0 mb-3" style={{ textAlign: "left" }}>
-            <h5 className="text-uppercase">Support</h5>
-            <ul className="list-unstyled">
+          <div className="min-w-[160px]">
+            <h5 className="uppercase font-semibold text-white mb-2">Support</h5>
+            <ul className="space-y-1 text-sm list-none p-0 m-0">
               <li>About Us</li>
               <li>Help</li>
               <li>Advisories</li>
@@ -44,7 +42,7 @@ function Footer() {
         </div>
       </div>
 
-      <div className="footer-copyright text-center py-3">
+      <div className="text-center py-3 mt-6 border-t border-gray-700 text-sm text-gray-400">
         © 2022 Copyright: children cloud team
       </div>
     </footer>
