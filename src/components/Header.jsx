@@ -21,6 +21,11 @@ const Header = () => {
 
   const navs = [
     {
+      name: "Dashboard",
+      url: "/dashboard",
+      role: [PROCUREMENTSTAFF, ADMIN, SUPPLIER, SITEMANAGER],
+    },
+    {
       name: "Purchase Order",
       url: "/order",
       role: [SITEMANAGER],

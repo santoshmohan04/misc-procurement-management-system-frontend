@@ -1,5 +1,6 @@
 import "./index.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
 import PurchaseOrder from "./pages/PurchaseOrder";
 import PlacedOrderRequest from "./pages/PlacedOrderRequest";
 import Response from "./pages/Response";
@@ -28,6 +29,7 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/order" element={<PurchaseOrder />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/orderRequest" element={<PlacedOrderRequest />} />
         <Route path="/request" element={<Request />} />
         <Route path="/response" element={<Response />} />
