@@ -7,7 +7,7 @@ import userRequest from "../api/User/user.request";
 import useFetchUserProfile from "../hooks/useFetchUserProfile";
 import { PROCUREMENTSTAFF, SITEMANAGER, SUPPLIER, ADMIN } from "../constants";
 
-const Header = () => {
+const Header = ({ onToggleSidebar }) => {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [mobNavHeight, setMobNavHeight] = useState(1000);
   const mobNav = useRef(null);
@@ -71,10 +71,29 @@ const Header = () => {
   return (
     <>
       <div className="relative z-50 w-full mx-auto border-b border-black/15">
-        <div className="bg-white w-full max-w-7xl mx-auto flex justify-between gap-8 px-8 sm:px-16 items-center h-16 font-semibold text-md">
-          <div className="flex gap-10">
+        <div className="bg-white w-full max-w-7xl mx-auto flex justify-between gap-8 px-4 sm:px-8 items-center h-14 font-semibold text-md">
+          <div className="flex items-center gap-3">
+            {onToggleSidebar && (
+              <button
+                onClick={onToggleSidebar}
+                aria-label="Toggle sidebar"
+                className="p-1.5 rounded hover:bg-gray-100 text-gray-600 transition-colors">
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              </button>
+            )}
             <Link
-              className="no-underline font-bold text-2xl text-black tracking-tighter"
+              className="no-underline font-bold text-xl text-black tracking-tighter"
               to="/">
               Procurement Construction Industry
             </Link>
@@ -116,7 +135,7 @@ const Header = () => {
             isMobileNavOpen ? 0 : `-${mobNavHeight}px`
           })`,
         }}
-        className={`flex z-40 py-2 absolute mt-16 top-0 w-full bg-white transition duration-500 flex-col items-center border-b border-black/10 rounded-b-xl`}>
+        className={`flex z-40 py-2 absolute mt-14 top-0 w-full bg-white transition duration-500 flex-col items-center border-b border-black/10 rounded-b-xl`}>
         {navs.map((nav, key) =>
           nav.role.includes(role) ? (
             <NavLink

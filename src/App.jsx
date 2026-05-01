@@ -1,4 +1,5 @@
 import "./index.css";
+import { Toaster } from "sonner";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import PurchaseOrder from "./pages/PurchaseOrder";
@@ -27,6 +28,7 @@ import PurchasedOrderSupplier from "./pages/purchasedOrderSupplier";
 const App = () => {
   return (
     <Router>
+      <Toaster richColors position="top-right" />
       <Routes>
         <Route path="/order" element={<PurchaseOrder />} />
         <Route path="/dashboard" element={<Dashboard />} />

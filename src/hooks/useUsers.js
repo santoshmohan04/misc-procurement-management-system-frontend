@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 import {
   useGetUsersQuery,
   useDeleteUserMutation,
@@ -20,23 +20,14 @@ const useUsers = () => {
 
   const deleteUser = useCallback(
     async (id) => {
-      const result = await Swal.fire({
-        title: "Are you sure?",
-        text: "Please confirm whether you intend to delete this User",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Delete",
-      });
-      if (result.isConfirmed) {
-        try {
-          await deleteUserMutation(id).unwrap();
-        } catch (err) {
-          const msgText =
-            err?.message?.split("Error: ")[1] || "Something went wrong";
-          Swal.fire("Error!", msgText, "error");
-        }
+      if (!window.confirm("Please confirm whether you intend to delete this User")) return;
+      try {
+        await deleteUserMutation(id).unwrap();
+        toast.success("User deleted successfully.");
+      } catch (err) {
+        const msgText =
+          err?.message?.split("Error: ")[1] || "Something went wrong";
+        toast.error(msgText);
       }
     },
     [deleteUserMutation],

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 
 import useFetchUserProfile from "../hooks/useFetchUserProfile";
 import { getUserDetails } from "../utils/helper";
@@ -55,9 +55,9 @@ export const Login = () => {
           navigate("/");
         }
       } else
-        Swal.fire("Login failed!", "Invalid username or password.", "error");
+        toast.error("Invalid username or password.");
     } catch (err) {
-      Swal.fire("Oops...", "Something went wrong!", "error");
+      toast.error("Something went wrong!");
     }
   };
 

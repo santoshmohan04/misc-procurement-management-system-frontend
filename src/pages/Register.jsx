@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 
 import userRequest from "../api/User/user.request";
 import useFetchUserProfile from "../hooks/useFetchUserProfile";
@@ -57,21 +57,10 @@ export const Register = () => {
 
     const res = await userRequest.addUser(data);
     if (res?.status === SUCCESS) {
-      Swal.fire({
-        title: "Registration success!",
-        text: "Click okay to login.",
-        confirmButtonText: "Okay",
-        showDenyButton: true,
-        denyButtonText: "Cancel",
-      }).then((result) => {
-        if (result.isConfirmed) navigate("/");
-      });
+      toast.success("Registration successful! You can now log in.");
+      navigate("/");
     } else {
-      Swal.fire(
-        "Registration failed!",
-        "Something went wrong. Please try again.",
-        "error",
-      );
+      toast.error("Registration failed. Something went wrong. Please try again.");
     }
   };
 

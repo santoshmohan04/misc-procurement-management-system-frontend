@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 import {
   useGetManagerOrdersQuery,
   useGetOrdersQuery,
@@ -35,21 +35,12 @@ export const useManagerOrders = () => {
 
   const deleteOrder = useCallback(
     async (id) => {
-      const result = await Swal.fire({
-        title: "Are you sure?",
-        text: "Please confirm whether you intend to delete this Order",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Delete",
-      });
-      if (result.isConfirmed) {
-        try {
-          await deleteOrderMutation(id).unwrap();
-        } catch {
-          Swal.fire("Error!", "Something went wrong", "error");
-        }
+      if (!window.confirm("Please confirm whether you intend to delete this Order")) return;
+      try {
+        await deleteOrderMutation(id).unwrap();
+        toast.success("Order deleted successfully.");
+      } catch {
+        toast.error("Something went wrong while deleting the order.");
       }
     },
     [deleteOrderMutation],
@@ -87,14 +78,10 @@ export const useCreateOrder = () => {
     async (orderData) => {
       try {
         await createOrderMutation(orderData).unwrap();
-        Swal.fire(
-          "Purchase Order Created Successfully!",
-          "Click Ok to continue",
-          "success",
-        );
+        toast.success("Purchase Order created successfully!");
         return true;
       } catch {
-        Swal.fire("Error!", "Something went wrong", "error");
+        toast.error("Something went wrong. Please try again.");
         return false;
       }
     },

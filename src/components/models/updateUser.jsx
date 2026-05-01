@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "sonner";
 import orderRequest from "../../api/Order/order.request";
-import Swal from "sweetalert2";
 import userRequest from "../../api/User/user.request";
 import supplierRequest from "../../api/Supplier/supplier.request";
 
@@ -37,15 +37,11 @@ const UpdateUser = ({ user }) => {
         )
         .then((res) => {
           console.log(res);
-          Swal.fire(
-            `Purchase Order Created Successfully!`,
-            "Click Ok to continue",
-            "success",
-          );
+          toast.success("User role updated successfully!");
           fetchUsers();
         })
         .catch((err) => {
-          Swal.fire("Error!", "Something went wrong", "error");
+          toast.error("Something went wrong. Please try again.");
         });
     } else {
       userRequest
@@ -57,16 +53,12 @@ const UpdateUser = ({ user }) => {
         )
         .then((res) => {
           console.log(res);
-          Swal.fire(
-            `Purchase Order Created Successfully!`,
-            "Click Ok to continue",
-            "success",
-          );
+          toast.success("User role updated successfully!");
 
           fetchUsers();
         })
         .catch((err) => {
-          Swal.fire("Error!", "Something went wrong", "error");
+          toast.error("Something went wrong. Please try again.");
         });
     }
   };
@@ -74,7 +66,7 @@ const UpdateUser = ({ user }) => {
   return (
     <>
       <div
-        class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110"
+        className="w-4 mr-2 transform hover:text-purple-500 hover:scale-110"
         onClick={() => setShowModal(true)}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -82,9 +74,9 @@ const UpdateUser = ({ user }) => {
           viewBox="0 0 24 24"
           stroke="currentColor">
           <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
             d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
           />
         </svg>
@@ -108,18 +100,18 @@ const UpdateUser = ({ user }) => {
                 </div>
                 {/*body*/}
 
-                <div class="flex items-center justify-center p-12">
-                  <div class="w-full px-3 " style={{ width: "500px" }}>
+                <div className="flex items-center justify-center p-12">
+                  <div className="w-full px-3 " style={{ width: "500px" }}>
                     <form onSubmit={handleSubmit}>
-                      <div class="mb-3">
+                      <div className="mb-3">
                         <label
-                          for="guest"
-                          class="mb-3 block text-base font-medium text-[#07074D]">
+                          htmlFor="guest"
+                          className="mb-3 block text-base font-medium text-[#07074D]">
                           Change Role
                         </label>
                         <select
                           id="countries"
-                          class=" border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          className=" border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           required
                           onChange={(e) => setrole(e.target.value)}>
                           <option value="Select">Select </option>
@@ -134,15 +126,15 @@ const UpdateUser = ({ user }) => {
                       </div>
                       {role === "SUPPLIER" && (
                         <>
-                          <div class="mb-3">
+                          <div className="mb-3">
                             <label
-                              for="guest"
-                              class="mb-3 block text-base font-medium text-[#07074D]">
+                              htmlFor="guest"
+                              className="mb-3 block text-base font-medium text-[#07074D]">
                               Select Supplier
                             </label>
                             <select
                               id="countries"
-                              class=" border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                              className=" border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
                               required
                               onChange={(e) => setsupplier(e.target.value)}>
                               <option selected>select supplier</option>
@@ -166,13 +158,13 @@ const UpdateUser = ({ user }) => {
 
                       <div className="flex">
                         <button
-                          class="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none"
+                          className="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none"
                           type="submit">
                           Submit
                         </button>
 
                         <button
-                          class="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none ml-2"
+                          className="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none ml-2"
                           onClick={() => setShowModal(false)}>
                           Close
                         </button>
