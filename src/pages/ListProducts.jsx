@@ -17,15 +17,16 @@ const ListProducts = () => {
 
   const deleteOrder = (id) => {
     if (!window.confirm("Please confirm whether you intend to delete this Product")) return;
-    deliveryRequest
-      .deletedeliveryAdvice(id)
+    productRequest
+      .deleteProduct(id)
       .then((res) => {
         console.log(res);
         toast.success("Product deleted successfully.");
+        setorders((prev) => prev.filter((p) => p._id !== id));
       })
       .catch((err) => {
         console.log(err.message);
-        const msgText = err.message.split("Error: ")[1];
+        const msgText = err.message?.split("Error: ")[1];
         toast.error(msgText || "Something went wrong.");
       });
   };

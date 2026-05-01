@@ -8,6 +8,8 @@ import AppLayout from "../components/AppLayout";
 const AddSuppliers = () => {
   const [orderType, setorderType] = useState("");
   const [itemName, setitemName] = useState("");
+  const [email, setemail] = useState("");
+  const [company, setcompany] = useState("");
   const [measuringUnit, setmeasuringUnit] = useState("");
   const [quantity, setquantity] = useState(0);
   const [description, setdescription] = useState("");
@@ -49,6 +51,8 @@ const AddSuppliers = () => {
     setdescription("");
     setsupplierID("");
     setitemName("");
+    setemail("");
+    setcompany("");
     setrequiredDate("");
     setorderType("");
     setmeasuringUnit("");
@@ -88,8 +92,8 @@ const AddSuppliers = () => {
               id="email"
               className="block w-full px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded focus:border-blue-500 focus:outline-none"
               placeholder="Enter Email"
-              value={itemName}
-              onChange={(e) => setitemName(e.target.value)}
+              value={email}
+              onChange={(e) => setemail(e.target.value)}
             />
           </div>
           <div>
@@ -99,8 +103,8 @@ const AddSuppliers = () => {
               id="company"
               className="block w-full px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded focus:border-blue-500 focus:outline-none"
               placeholder="Enter Company"
-              value={itemName}
-              onChange={(e) => setitemName(e.target.value)}
+              value={company}
+              onChange={(e) => setcompany(e.target.value)}
             />
           </div>
           <div>
